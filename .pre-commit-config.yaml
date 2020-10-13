@@ -1,0 +1,10 @@
+repos:
+- repo: local
+  hooks:
+    - id: scalafmt
+      name: Formatting scala and sbt files
+      description: Formats all scala and sbt files
+      entry: sbt -warn scalafmtAll scalafmtSbt
+      pass_filenames: false
+      language: system
+      files: \.(scala|sbt)$
