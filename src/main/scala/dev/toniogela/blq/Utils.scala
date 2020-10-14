@@ -1,3 +1,6 @@
+/* Copyright 2020 Antonio Gelameris
+ *
+ * SPDX-License-Identifier: MIT */
 package dev.toniogela.blq
 
 import com.github.shyiko.mysql.binlog.BinaryLogFileReader

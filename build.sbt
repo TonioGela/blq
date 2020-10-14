@@ -18,5 +18,6 @@ lazy val root = (project in file(".")).settings(
   commonSettings,
   name := "blq",
   Compile / mainClass := Some("dev.toniogela.blq.Main"),
+  headerLicense := Some(HeaderLicense.MIT("2020", "Antonio Gelameris", HeaderLicenseStyle.SpdxSyntax)),
   libraryDependencies ++= (mainDependencies ++ testDependencies.map(_ % Test))
 ).enablePlugins(NativeImagePlugin)
