@@ -1,11 +1,9 @@
 package dev.toniogela.blq
 
 import com.github.shyiko.mysql.binlog.BinaryLogFileReader
-import java.io.File
-import com.github.shyiko.mysql.binlog.event.Event
+import com.github.shyiko.mysql.binlog.event.{Event, EventType}
 import com.monovore.decline.Argument
-import cats.data._
-import com.github.shyiko.mysql.binlog.event.EventType
+import java.io.File
 import scala.util.Try
 
 object EventIterator {

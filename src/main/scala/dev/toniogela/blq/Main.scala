@@ -1,12 +1,10 @@
 package dev.toniogela.blq
 
-import cats.implicits._
+import com.github.shyiko.mysql.binlog.event.{EventHeaderV4, EventType}
 import com.monovore.decline._
 import com.monovore.decline.Opts._
 import dev.toniogela.blq.Args._
 import java.io.File
-import com.github.shyiko.mysql.binlog.event.EventType
-import com.github.shyiko.mysql.binlog.event.EventHeaderV4
 
 object Main
     extends CommandApp(
