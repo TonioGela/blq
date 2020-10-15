@@ -4,7 +4,7 @@ repos:
     - id: scalafmt
       name: Formatting and Fixing scala and sbt files
       description: Executes ScalaFmt and ScalaFix on all scala and sbt files
-      entry: sbt --client fixAll; scalafmtAll; scalafmtSbt
+      entry: sbt --client scalafixAll; scalafmtAll; scalafmtSbt
       pass_filenames: false
       language: system
       files: \.(scala|sbt)$

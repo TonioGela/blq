@@ -1,0 +1,84 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  release:
+    types: [published]
+jobs:
+  unix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macOS-latest, ubuntu-latest, windows-latest]
+        include:
+          - os: macOS-latest
+            build_command: sbt nativeImage
+            test_command: sbt test
+            zip_command: zip -j blq-x86_64-apple-darwin.zip target/native-image/blq
+            uploaded_filename: blq-x86_64-apple-darwin
+            local_path: target/native-image/blq
+          - os: ubuntu-latest
+            build_command: sbt nativeImage
+            test_command: sbt test
+            zip_command: zip -j blq-x86_64-pc-linux.zip target/native-image/blq
+            uploaded_filename: blq-x86_64-pc-linux
+            local_path: target/native-image/blq
+          - os: windows-latest
+            build_command: >-
+              "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat" && sbt nativeImage
+            test_command: >-
+              "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat" && sbt test
+            zip_command: Compress-Archive -LiteralPath .\target\native-image\blq.exe -DestinationPath .\blq-x86_64-pc-win32.zip
+            uploaded_filename: blq-x86_64-pc-win32
+            local_path: target\native-image\blq.exe
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup scala
+        uses: olafurpg/setup-scala@v6
+      - name: retrieve coursier cache
+        uses: coursier/cache-action@v5
+      - name: fetch tags
+        run: git fetch --tags || true
+
+      - name: sbt test
+        if: ${{ matrix.os != 'windows-latest' }}
+        shell: bash
+        run: ${{ matrix.test_command }}
+      - name: sbt test (windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: cmd
+        run: ${{ matrix.test_command }}
+
+      - name: sbt nativeImage
+        if: ${{ matrix.os != 'windows-latest' }}
+        shell: bash
+        run: ${{ matrix.build_command }}
+      - name: sbt nativeImage (windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: cmd
+        run: ${{ matrix.build_command }}
+
+      - name: upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          path: ${{ matrix.local_path }}
+          name: ${{ matrix.uploaded_filename }}
+
+      - name: zip artifact
+        if: github.event_name == 'release'
+        run: ${{ matrix.zip_command }}
+
+      - name: upload release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ matrix.uploaded_filename }}.zip
+          asset_name: ${{ matrix.uploaded_filename }}.zip
+          asset_content_type: application/zip

@@ -17,5 +17,7 @@ object EventsIterator {
     def filterTypes(types: NonEmptyList[EventType]): Iterator[(Event, Int)] = iterator.filter { case (e, _) =>
       types.contains_(e.getHeader[EventHeaderV4]().getEventType())
     }
+
+    def headers: Iterator[(EventHeaderV4, Int)] = iterator.map { case (e, i) => (e.getHeader[EventHeaderV4](), i) }
   }
 }

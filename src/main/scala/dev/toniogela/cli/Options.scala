@@ -8,6 +8,7 @@ import com.monovore.decline.Opts
 import com.monovore.decline.Opts._
 import dev.toniogela.blq.cli.Args._
 import com.github.shyiko.mysql.binlog.event.EventType
+import com.monovore.decline.Visibility
 
 object Options {
   val binlogFile: Opts[File] = argument[File]("binlogFile")
@@ -35,5 +36,10 @@ object Options {
 
   val printMode: Opts[PrettyPrint] = (flag("count", help = "Count events matching filters.").as(Count))
     .orElse(flag("with-numbers", help = "Show event numbers").as(Numbers)).withDefault(Default)
+
+  val headers: Opts[Unit] = flag("header", help = "Prints just the headers.")
+
+  val version: Opts[Unit] = flag("version", "Prints version number and exits.", "v", Visibility.Partial)
+    .map(_ => println("0.1.0-SNAPSHOT"))
 
 }

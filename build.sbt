@@ -14,7 +14,7 @@ inThisBuild(Seq(
 
 inThisBuild(compilerPlugins.map(addCompilerPlugin) ++ scalaFixSettings)
 
-lazy val root = (project in file(".")).settings(
+lazy val blq = (project in file(".")).settings(
   commonSettings,
   name := "blq",
   Compile / mainClass := Some("dev.toniogela.blq.Main"),
