@@ -3,26 +3,24 @@
  * SPDX-License-Identifier: MIT */
 package dev.toniogela.blq
 
-import com.github.shyiko.mysql.binlog.event.{EventHeaderV4, EventType}
 import com.monovore.decline._
-import com.monovore.decline.Opts._
-import dev.toniogela.blq.Args._
-import java.io.File
+import dev.toniogela.blq.cli.Options._
+import dev.toniogela.blq.EventsIterator._
+import scala.Console._
 
 object Main
     extends CommandApp(
       name = "bq",
       header = "Prints binlog files content optionally applying filter. Filters do stack and apply to count too.",
-      main = (
-        argument[File]("binlogFile"),
-        options[EventType]("filter", "Filter events according to event type. Can be repeated.").orNone,
-        option[Int]("head", "Reads just the first n events.", metavar = "n").orNone,
-        flag("count", help = "Count events matching filters.").map(_ => true).withDefault(false)
-      ).mapN { (binlog, types, head, count) =>
-        val events          = EventIterator(binlog)
-        val filteredEvents  = types
-          .fold(events)(ts => events.filter(e => ts.toList contains e.getHeader[EventHeaderV4].getEventType))
-        val truncatedEvents = head.fold(filteredEvents)(filteredEvents.take(_))
-        if (count) println(truncatedEvents.count(_ => true)) else truncatedEvents.foreach(println)
+      main = (binlogFile, eventTypes.orNone, eventRange.orNone, printMode).mapN { (binlog, types, range, print) =>
+        val events           = EventsIterator(binlog).zipWithIndex
+        val filteredEvents   = types.fold(events)(events.filterTypes)
+        val reFilteredEvents = range.fold(filteredEvents) { case (a, b) => filteredEvents.slice(a, b + 1) }
+        def number(n: Int)   = s"$GREEN[$RED$n$GREEN]$RESET"
+        print match {
+          case Numbers => reFilteredEvents.foreach { case (e, i) => println(s"${number(i)} $e") }
+          case Count   => println(reFilteredEvents.size)
+          case Default => reFilteredEvents.foreach(println)
+        }
       }
     )
