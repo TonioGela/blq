@@ -10,9 +10,9 @@ pull_request_rules:
   - name: merge scala-steward's PRs
     conditions:
       - author=scala-steward
-      - status-success=Build (macOS-latest)
-      - status-success=Build (ubuntu-latest)
-      - status-success=Build (windows-latest)
+      - status-success=unix (macOS-latest) 
+      - status-success=unix (ubuntu-latest)
+      - status-success=unix (windows-latest)
     actions:
       merge:
         method: squash
