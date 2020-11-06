@@ -19,6 +19,10 @@ object Settings {
   )
 
   val commonSettings: Seq[Def.Setting[_]] = Seq[Def.Setting[_]](
+    name := "blq",
+    organization := "dev.toniogela",
+    organizationName := "toniogela.dev",
+    version := "0.1.0-SNAPSHOT",
     scalacOptions -= "-Xfatal-warnings",
     scalacOptions += "-Yimports:" ++ Seq("scala", "scala.Predef", "cats", "cats.data", "cats.implicits").mkString(","),
     Test / parallelExecution := false,
