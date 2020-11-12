@@ -18,10 +18,12 @@ object MainCommand {
       val events             = EventsIterator(binlog).zipWithIndex
       val filteredEvents     = range.fold(events) { case (a, b) => events.slice(a, b + 1) }
       val reFilteredEvents   = types.fold(filteredEvents)(filteredEvents.filterTypes)
-      val reReFilteredEvents = if (header) reFilteredEvents.headers else reFilteredEvents
+      val reReFilteredEvents =
+        if (header) reFilteredEvents.headers.map { case (h, i) => (i, h.getEventType()) }
+        else reFilteredEvents.map(_.swap)
       def number(n: Int)     = s"$GREEN[$RED$n$GREEN]$RESET"
       print match {
-        case Numbers => reReFilteredEvents.foreach { case (e, i) => println(s"${number(i)} $e") }
+        case Numbers => reReFilteredEvents.foreach { case (i, e) => println(s"${number(i)} $e") }
         case Count   => println(reReFilteredEvents.size)
         case Default => reReFilteredEvents.foreach(println)
       }

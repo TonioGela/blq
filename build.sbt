@@ -12,6 +12,7 @@ inThisBuild(compilerPlugins.map(addCompilerPlugin) ++ scalaFixSettings)
 lazy val blq = (project in file(".")).settings(
   commonSettings,
   Compile / mainClass := Some("dev.toniogela.blq.Main"),
+  nativeImageOptions ++= List("--initialize-at-build-time", "-H:+ReportExceptionStackTraces"),
   headerLicense := Some(HeaderLicense.MIT("2020", "Antonio Gelameris", HeaderLicenseStyle.SpdxSyntax)),
   libraryDependencies ++= (mainDependencies ++ testDependencies.map(_ % Test))
 ).enablePlugins(NativeImagePlugin)
