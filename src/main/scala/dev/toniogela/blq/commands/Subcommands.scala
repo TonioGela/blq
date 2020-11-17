@@ -19,7 +19,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicReference
-import cats.data.Validated.Valid
+import scala.collection.parallel.CollectionConverters._
 
 object Subcommands {
 
@@ -42,36 +42,38 @@ object Subcommands {
     val numberOfDDLs: AtomicReference[Long]                   = new AtomicReference(0)
     val infos: mutable.Map[(String, String), (Int, Int, Int)] = mutable.Map[(String, String), (Int, Int, Int)]()
 
-    val events = files.toList.iterator.flatMap(EventsIterator(_))
-    while (events.hasNext) {
-      val event  = events.next()
-      val header = event.getHeader[EventHeaderV4]()
+    files.toList.par.map { file =>
+      val events = EventsIterator(file)
+      while (events.hasNext) {
+        val event  = events.next()
+        val header = event.getHeader[EventHeaderV4]()
 
-      val timestamp = header.getTimestamp()
-      firstTimestamp.compareAndSet(0, timestamp)
-      lastTimestamp.set(timestamp)
+        val timestamp = header.getTimestamp()
+        firstTimestamp.compareAndSet(0, timestamp)
+        lastTimestamp.set(timestamp)
 
-      header.getEventType() match {
-        case QUERY     => if (event.getData[QueryEventData]().getSql() =!= "BEGIN") numberOfDDLs.getAndUpdate(_ + 1)
-        case TABLE_MAP =>
-          val tmap  = event.getData[TableMapEventData]()
-          val table = (tmap.getDatabase(), tmap.getTable())
-          if (events.hasNext) {
-            val innerEvent = events.next()
-            innerEvent.getHeader[EventHeaderV4]().getEventType() match {
-              case EXT_WRITE_ROWS | WRITE_ROWS | PRE_GA_WRITE_ROWS    =>
-                val (i, d, u) = infos.getOrElse(table, (0, 0, 0))
-                infos += table -> ((i + 1, d, u))
-              case EXT_DELETE_ROWS | DELETE_ROWS | PRE_GA_DELETE_ROWS =>
-                val (i, d, u) = infos.getOrElse(table, (0, 0, 0))
-                infos += table -> ((i, d + 1, u))
-              case EXT_UPDATE_ROWS | UPDATE_ROWS | PRE_GA_UPDATE_ROWS =>
-                val (i, d, u) = infos.getOrElse(table, (0, 0, 0))
-                infos += table -> ((i, d, u + 1))
-              case _                                                  => ()
+        header.getEventType() match {
+          case QUERY     => if (event.getData[QueryEventData]().getSql() =!= "BEGIN") numberOfDDLs.getAndUpdate(_ + 1)
+          case TABLE_MAP =>
+            val tmap  = event.getData[TableMapEventData]()
+            val table = (tmap.getDatabase(), tmap.getTable())
+            if (events.hasNext) {
+              val innerEvent = events.next()
+              innerEvent.getHeader[EventHeaderV4]().getEventType() match {
+                case EXT_WRITE_ROWS | WRITE_ROWS | PRE_GA_WRITE_ROWS    =>
+                  val (i, d, u) = infos.getOrElse(table, (0, 0, 0))
+                  infos += table -> ((i + 1, d, u))
+                case EXT_DELETE_ROWS | DELETE_ROWS | PRE_GA_DELETE_ROWS =>
+                  val (i, d, u) = infos.getOrElse(table, (0, 0, 0))
+                  infos += table -> ((i, d + 1, u))
+                case EXT_UPDATE_ROWS | UPDATE_ROWS | PRE_GA_UPDATE_ROWS =>
+                  val (i, d, u) = infos.getOrElse(table, (0, 0, 0))
+                  infos += table -> ((i, d, u + 1))
+                case _                                                  => ()
+              }
             }
-          }
-        case _         => ()
+          case _         => ()
+        }
       }
     }
 
