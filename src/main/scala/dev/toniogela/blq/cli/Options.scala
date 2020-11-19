@@ -1,14 +1,15 @@
 /* Copyright 2020 Antonio Gelameris
  *
  * SPDX-License-Identifier: MIT */
+
 package dev.toniogela.blq.cli
 
 import java.io.File
-import com.monovore.decline.Opts
-import com.monovore.decline.Opts._
-import dev.toniogela.blq.cli.Args._
+
 import com.github.shyiko.mysql.binlog.event.EventType
-import com.monovore.decline.Visibility
+import com.monovore.decline.Opts._
+import com.monovore.decline.{Opts, Visibility}
+import dev.toniogela.blq.cli.Args._
 
 object Options {
   val binlogFile: Opts[File] = argument[File]("binlogFile")
@@ -42,4 +43,11 @@ object Options {
   val version: Opts[Unit] = flag("version", "Prints version number and exits.", "v", Visibility.Partial)
     .map(_ => println("0.1.0-SNAPSHOT"))
 
+  sealed trait TableMapMode
+  case object Schemas extends TableMapMode
+  case object Tables  extends TableMapMode
+  case object Both    extends TableMapMode
+
+  val tableMode: Opts[TableMapMode] = flag("tables", "Prints just the tables of the TABLE_MAP events.").as(Tables)
+    .orElse(flag("schemas", "Prints just the schemas of the TABLE_MAP events.").as(Schemas).withDefault(Both))
 }

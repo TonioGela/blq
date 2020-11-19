@@ -1,9 +1,15 @@
+/* Copyright 2020 Antonio Gelameris
+ *
+ * SPDX-License-Identifier: MIT */
+
 package dev.toniogela.blq.cli
 
-import com.monovore.decline.Argument
-import com.github.shyiko.mysql.binlog.event.EventType
 import java.io.File
+
 import scala.util.Try
+
+import com.github.shyiko.mysql.binlog.event.EventType
+import com.monovore.decline.Argument
 
 object Args {
 
