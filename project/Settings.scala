@@ -8,7 +8,7 @@ object Settings {
 
   val compilerPlugins: Seq[sbt.librarymanagement.ModuleID] = Seq(
     crossPlugin("org.typelevel"    %% "kind-projector"     % "0.11.0"),
-    crossPlugin("com.github.cb372" %% "scala-typed-holes"  % "0.1.5"),
+    crossPlugin("com.github.cb372" %% "scala-typed-holes"  % "0.1.6"),
     compilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
   )
 
