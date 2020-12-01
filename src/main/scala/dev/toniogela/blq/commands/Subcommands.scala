@@ -5,21 +5,22 @@
 package dev.toniogela.blq.commands
 
 import java.io.File
+import java.time.format.DateTimeFormatter
+import java.time.{Instant, ZoneId, ZonedDateTime}
+import java.util.concurrent.atomic.AtomicReference
+
+import scala.collection.mutable
+import scala.collection.parallel.CollectionConverters._
 
 import com.github.shyiko.mysql.binlog.event.EventType._
 import com.github.shyiko.mysql.binlog.event.{EventHeaderV4, QueryEventData, TableMapEventData}
 import com.monovore.decline.Opts._
-import com.monovore.decline.{Command, Opts}
+import com.monovore.decline.{Argument, Command, Opts}
+import dev.toniogela.blq.TimeUtils
 import dev.toniogela.blq.cli.Args._
 import dev.toniogela.blq.cli.Options._
 import dev.toniogela.blq.service.EventsIterator
 import dev.toniogela.blq.service.EventsIterator._
-import scala.collection.mutable
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.concurrent.atomic.AtomicReference
-import scala.collection.parallel.CollectionConverters._
 
 object Subcommands {
 
@@ -134,4 +135,50 @@ object Subcommands {
 
   val stats: Opts[Unit] = Opts
     .subcommand(Command("stats", "Prints the statistics of the passed binlog files")(statOpts))
+
+  implicit private val alignTableReader: Argument[(String, String, ZonedDateTime, ZonedDateTime)] =
+    new Argument[(String, String, ZonedDateTime, ZonedDateTime)] {
+      override def defaultMetavar: String = "align-table"
+
+      val errorMessage =
+        s"the align-table flag should have this structure: <schema.table@2020-10-21T00:56:04+02:00[Europe/Berlin]>"
+
+      override def read(
+          string: String
+      ): cats.data.ValidatedNel[String, (String, String, ZonedDateTime, ZonedDateTime)] = Validated
+        .condNel(string.count(_ === '@') === 1, string.split('@'), errorMessage)
+        .andThen { case Array(tableInfo, dateInfo) =>
+          Validated.condNel(dateInfo.count(_ === '~') === 1, dateInfo.split('~'), errorMessage).map {
+            case Array(start, end) => (tableInfo, start, end)
+          }
+        }.andThen { case (tableInfo, startdate, endDate) =>
+          val dates = for {
+            start <- TimeUtils.toDateTime(startdate)
+            end   <- TimeUtils.toDateTime(endDate)
+          } yield (start, end)
+
+          Validated.fromEither(dates).leftMap(_ => NonEmptyList.one(errorMessage)).map { case (x, y) =>
+            (tableInfo, x, y)
+          }
+        }.andThen { case (string, start, end) =>
+          Validated.condNel(string.count(_ === '.') === 1, string.split('.'), errorMessage)
+            .map { case Array(schema, name) => (schema, name, start, end) }
+        }
+    }
+
+  private val alignTableOpts: Opts[Unit] =
+    (argument[(String, String, ZonedDateTime, ZonedDateTime)]("align-table"), argument[File]("binlogFile")).mapN {
+      (maybeAlignTable, binlog) =>
+        val (_, _, startDate, endDate) = maybeAlignTable
+        val filter                     = (x: ZonedDateTime) => x.isAfter(startDate) && (x.isBefore(endDate) || x.isEqual(endDate))
+
+        EventsIterator(binlog).filter { event =>
+          val dateTime: ZonedDateTime = Instant.ofEpochMilli(event.getHeader[EventHeaderV4].getTimestamp)
+            .atZone(TimeUtils.DEFAULT_ZONE)
+          filter(dateTime)
+        }.foreach(println)
+    }
+
+  val alignTable: Opts[Unit] = Opts.subcommand(Command("align", "timeFilter")(alignTableOpts))
+
 }

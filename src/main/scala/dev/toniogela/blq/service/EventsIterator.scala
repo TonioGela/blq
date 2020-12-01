@@ -8,18 +8,20 @@ import java.io.File
 
 import com.github.shyiko.mysql.binlog.BinaryLogFileReader
 import com.github.shyiko.mysql.binlog.event.{Event, EventHeaderV4, EventType, TableMapEventData}
+import com.github.shyiko.mysql.binlog.event.deserialization.EventDeserializer
 
 object EventsIterator {
 
   def apply(file: File): Iterator[Event] = {
     val reader: BinaryLogFileReader = new BinaryLogFileReader(file)
+    new BinaryLogFileReader(file, new EventDeserializer)
     Iterator.continually(reader.readEvent).map(Option(_)).takeWhile(_.isDefined).flatten
   }
 
   implicit class pimpedIteratorZipped(val iterator: Iterator[(Event, Int)]) {
     implicit val typeEquality: Eq[EventType] = Eq.fromUniversalEquals[EventType]
 
-    def filterTypes(types: NonEmptyList[EventType]): Iterator[(Event, Int)] = iterator.filter { case (e, _) =>
+    def just(types: NonEmptyList[EventType]): Iterator[(Event, Int)] = iterator.filter { case (e, _) =>
       types.contains_(e.getHeader[EventHeaderV4]().getEventType())
     }
 

@@ -48,6 +48,6 @@ object Options {
   case object Tables  extends TableMapMode
   case object Both    extends TableMapMode
 
-  val tableMode: Opts[TableMapMode] = flag("tables", "Prints just the tables of the TABLE_MAP events.").as(Tables)
+  val tableMode: Opts[TableMapMode] = flag("names", "Prints just the tables names of the TABLE_MAP events.").as(Tables)
     .orElse(flag("schemas", "Prints just the schemas of the TABLE_MAP events.").as(Schemas).withDefault(Both))
 }
