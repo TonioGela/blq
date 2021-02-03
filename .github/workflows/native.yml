@@ -38,7 +38,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: setup scala
-        uses: olafurpg/setup-scala@v6
+        uses: olafurpg/setup-scala@v10
       - name: retrieve coursier cache
         uses: coursier/cache-action@v5
       - name: fetch tags
