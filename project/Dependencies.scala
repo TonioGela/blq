@@ -4,8 +4,8 @@ import sbt.Keys._
 object Dependencies {
 
   lazy val mainDependencies: Seq[ModuleID] = Seq(
-    "org.typelevel"          %% "cats-core"                   % "2.4.0",
-    "org.typelevel"          %% "cats-kernel"                 % "2.4.0",
+    "org.typelevel"          %% "cats-core"                   % "2.4.1",
+    "org.typelevel"          %% "cats-kernel"                 % "2.4.1",
     "com.chuusai"            %% "shapeless"                   % "2.3.3",
     "org.scodec"             %% "scodec-core"                 % "1.11.7",
     "org.scodec"             %% "scodec-bits"                 % "1.1.23",
