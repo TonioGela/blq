@@ -5,7 +5,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 Global / showSuccess := false
 Global / excludeLintKeys += showSuccess
 
-inThisBuild(Seq(scalaVersion := "2.13.3"))
+inThisBuild(Seq(scalaVersion := "2.13.5"))
 
 inThisBuild(compilerPlugins.map(addCompilerPlugin) ++ scalaFixSettings)
 
