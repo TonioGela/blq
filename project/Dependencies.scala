@@ -6,7 +6,7 @@ object Dependencies {
   lazy val mainDependencies: Seq[ModuleID] = Seq(
     "org.typelevel"          %% "cats-core"                   % "2.5.0",
     "org.typelevel"          %% "cats-kernel"                 % "2.5.0",
-    "com.chuusai"            %% "shapeless"                   % "2.3.3",
+    "com.chuusai"            %% "shapeless"                   % "2.3.4",
     "org.scodec"             %% "scodec-core"                 % "1.11.7",
     "org.scodec"             %% "scodec-bits"                 % "1.1.25",
     "com.monovore"           %% "decline"                     % "2.0.0",
