@@ -8,7 +8,7 @@ object Dependencies {
     "org.typelevel"          %% "cats-kernel"                 % "2.6.1",
     "com.chuusai"            %% "shapeless"                   % "2.3.6",
     "org.scodec"             %% "scodec-core"                 % "1.11.7",
-    "org.scodec"             %% "scodec-bits"                 % "1.1.26",
+    "org.scodec"             %% "scodec-bits"                 % "1.1.27",
     "com.monovore"           %% "decline"                     % "2.0.0",
     "com.zendesk"             % "mysql-binlog-connector-java" % "0.25.1",
     "org.scala-lang.modules" %% "scala-parallel-collections"  % "1.0.3"
