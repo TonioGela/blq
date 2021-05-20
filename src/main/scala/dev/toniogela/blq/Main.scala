@@ -12,5 +12,5 @@ object Main
     extends CommandApp(
       name = "blq",
       header = "Prints binlog files content optionally applying filters. Filters are in AND.",
-      main = MainCommand.command.orElse(Subcommands.tableMaps).orElse(Subcommands.stats).orElse(version)
+      main = MainCommand.commands.orElse(Subcommands.tableMaps).orElse(Subcommands.stats).orElse(version)
     )

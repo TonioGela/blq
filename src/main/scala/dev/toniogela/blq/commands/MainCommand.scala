@@ -13,7 +13,7 @@ import dev.toniogela.blq.service.EventsIterator._
 
 object MainCommand {
 
-  val command: Opts[Unit] = (binlogFile, eventTypes.orNone, eventRange.orNone, headers.orFalse, printMode)
+  val commands: Opts[Unit] = (binlogFile, eventTypes.orNone, eventRange.orNone, headers.orFalse, printMode)
     .mapN { (binlog, types, range, header, print) =>
       val events             = EventsIterator(binlog).zipWithIndex
       val filteredEvents     = range.fold(events) { case (a, b) => events.slice(a, b + 1) }
