@@ -12,25 +12,34 @@ Build the application using `sbt nativeImage` and you will find the executable u
 ## Usage 
 
 ```
-Usage: blq [--filter <type>]... [--head <integer> | --range <n:m>] [--count | --with-numbers] [--header] <binlogFile>
+Usage:
+    blq [--filter <type>]... [--head <integer> | --range <n:m>] [--header] [--count | --with-numbers] <binlogFile>
+    blq tables
+    blq stats
 
 Prints binlog files content optionally applying filters. Filters are in AND.
 
 Options and flags:
     --help
         Display this help text.
-    --version, -v
-        Prints version number and exits.
     --filter <type>
         Filter events according to event type. Can be repeated.
     --head <integer>
         Prints just the first n  matching events.
     --range <n:m>
         Prints just the matching events in the given inclusive range.
+    --header
+        Prints just the headers.
     --count
         Count events matching filters.
     --with-numbers
         Show event numbers
-    --header
-        Prints just the headers.
+    --version, -v
+        Prints version number and exits.
+
+Subcommands:
+    tables
+        Prints a summary of the table_map informations in the binlog file
+    stats
+        Prints the statistics of the passed binlog files
 ```
