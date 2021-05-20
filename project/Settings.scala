@@ -22,7 +22,7 @@ object Settings {
     name := "blq",
     organization := "dev.toniogela",
     organizationName := "toniogela.dev",
-    version := "0.1.0-SNAPSHOT",
+    version := "0.1.0",
     scalacOptions -= "-Xfatal-warnings",
     scalacOptions += "-Yimports:" ++ Seq("scala", "scala.Predef", "cats", "cats.data", "cats.implicits").mkString(","),
     Test / parallelExecution := false,
