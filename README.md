@@ -43,3 +43,23 @@ Subcommands:
     stats
         Prints the statistics of the passed binlog files
 ```
+
+## Examples
+
+The `stats` subcommand generates an output like
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ SUMMARY                                                  │
+├──────────────────────────────────────────────────────────┤
+│ From: 2021-04-28 19:25:55 GMT+02:00 [Europe/Rome]        │
+│ To:   2021-04-28 19:06:34 GMT+02:00 [Europe/Rome]        │
+│ Number of DDLs: 0                                        │
+├──────────────────────────────────────────────────────────┤
+│ database │ table        │ # insert │ # delete │ # update │
+├──────────────────────────────────────────────────────────┤
+│ foo      │ FOO_BAR_PROD │ 1        │ 0        │ 0        │
+│ bar      │ FOO_BAR_QA   │ 102      │ 5        │ 0        │
+│ baz      │ FOO_BAR_DEV  │ 34       │ 0        │ 3        │
+└──────────────────────────────────────────────────────────┘
+```
