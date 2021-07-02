@@ -14,5 +14,5 @@ object Dependencies {
     "org.scala-lang.modules" %% "scala-parallel-collections"  % "1.0.3"
   )
 
-  lazy val testDependencies: Seq[ModuleID] = Seq("org.scalameta" %% "munit" % "0.7.26")
+  lazy val testDependencies: Seq[ModuleID] = Seq("org.scalameta" %% "munit" % "0.7.27")
 }
