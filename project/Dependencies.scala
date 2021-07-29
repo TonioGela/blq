@@ -10,7 +10,7 @@ object Dependencies {
     "org.scodec"             %% "scodec-core"                 % "1.11.8",
     "org.scodec"             %% "scodec-bits"                 % "1.1.27",
     "com.monovore"           %% "decline"                     % "2.1.0",
-    "com.zendesk"             % "mysql-binlog-connector-java" % "0.25.2",
+    "com.zendesk"             % "mysql-binlog-connector-java" % "0.25.3",
     "org.scala-lang.modules" %% "scala-parallel-collections"  % "1.0.3"
   )
 
