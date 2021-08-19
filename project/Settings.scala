@@ -14,15 +14,15 @@ object Settings {
 
   val scalaFixSettings: Seq[Def.Setting[_]] = Seq(
     scalafixScalaBinaryVersion := "2.13",
-    semanticdbEnabled := true,
-    semanticdbVersion := scalafixSemanticdb.revision
+    semanticdbEnabled          := true,
+    semanticdbVersion          := scalafixSemanticdb.revision
   )
 
   val commonSettings: Seq[Def.Setting[_]] = Seq[Def.Setting[_]](
-    name := "blq",
-    organization := "dev.toniogela",
-    organizationName := "toniogela.dev",
-    version := "0.1.0",
+    name                     := "blq",
+    organization             := "dev.toniogela",
+    organizationName         := "toniogela.dev",
+    version                  := "0.1.0",
     scalacOptions -= "-Xfatal-warnings",
     scalacOptions += "-Yimports:" ++ Seq("scala", "scala.Predef", "cats", "cats.data", "cats.implicits").mkString(","),
     Test / parallelExecution := false,
