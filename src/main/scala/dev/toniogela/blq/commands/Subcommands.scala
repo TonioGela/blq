@@ -33,7 +33,7 @@ object Subcommands {
     ).toSet.foreach(println)
   )
 
-  val tableMaps: Opts[Unit] = Opts
+  val tableMaps: Opts[Unit]        = Opts
     .subcommand(Command("tables", "Prints a summary of the table_map informations in the binlog file")(tableMapsOpts))
 
   private val statOpts: Opts[Unit] = arguments[File]("binlogFile").map { files =>
