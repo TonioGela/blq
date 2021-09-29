@@ -11,7 +11,7 @@ object Dependencies {
     "org.scodec"             %% "scodec-bits"                 % "1.1.29",
     "com.monovore"           %% "decline"                     % "2.2.0",
     "com.zendesk"             % "mysql-binlog-connector-java" % "0.25.3",
-    "org.scala-lang.modules" %% "scala-parallel-collections"  % "1.0.3"
+    "org.scala-lang.modules" %% "scala-parallel-collections"  % "1.0.4"
   )
 
   lazy val testDependencies: Seq[ModuleID] = Seq("org.scalameta" %% "munit" % "0.7.29")
