@@ -13,7 +13,7 @@ import com.monovore.decline.Argument
 
 object Args {
 
-  implicit val fileReader: Argument[File]      = new Argument[File] {
+  implicit val fileReader: Argument[File] = new Argument[File] {
     override def defaultMetavar: String = "filePath"
 
     override def read(fileString: String): ValidatedNel[String, File] = Validated.validNel(new File(fileString))
@@ -28,7 +28,7 @@ object Args {
       .fromTry(Try(EventType.valueOf(eventType)))
       .leftMap(_ => NonEmptyList.one(s"$eventType is not a valid eventType. Use one of:\n$eventTypes"))
 
-    private val eventTypes: String                                        =
+    private val eventTypes: String =
       "START_V3, QUERY, STOP, ROTATE, INTVAR, LOAD, SLAVE, CREATE_FILE, APPEND_BLOCK, EXEC_LOAD," +
         "DELETE_FILE, NEW_LOAD, RAND, USER_VAR, FORMAT_DESCRIPTION, XID, BEGIN_LOAD_QUERY," +
         "EXECUTE_LOAD_QUERY, TABLE_MAP, PRE_GA_WRITE_ROWS, PRE_GA_UPDATE_ROWS, PRE_GA_DELETE_ROWS," +
