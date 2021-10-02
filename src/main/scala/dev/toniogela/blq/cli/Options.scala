@@ -17,10 +17,10 @@ object Options {
   val eventTypes: Opts[NonEmptyList[EventType]] =
     options[EventType]("filter", "Filter events according to event type. Can be repeated.")
 
-  private val head: Opts[(Int, Int)]            = option[Int]("head", "Prints just the first n  matching events.")
+  private val head: Opts[(Int, Int)] = option[Int]("head", "Prints just the first n  matching events.")
     .validate(s"head number should be > 0")(_ > 0).map(x => (0, x - 1))
 
-  private val rangeError                        = "range parameter should be in the shape <n:m> with n <= m"
+  private val rangeError = "range parameter should be in the shape <n:m> with n <= m"
 
   private val range: Opts[(Int, Int)] =
     option[String]("range", "Prints just the matching events in the given inclusive range.", metavar = "n:m")
