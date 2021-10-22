@@ -7,7 +7,7 @@ object Dependencies {
     "org.typelevel"          %% "cats-core"                   % "2.6.1",
     "org.typelevel"          %% "cats-kernel"                 % "2.6.1",
     "com.chuusai"            %% "shapeless"                   % "2.3.7",
-    "org.scodec"             %% "scodec-core"                 % "1.11.8",
+    "org.scodec"             %% "scodec-core"                 % "1.11.9",
     "org.scodec"             %% "scodec-bits"                 % "1.1.29",
     "com.monovore"           %% "decline"                     % "2.2.0",
     "com.zendesk"             % "mysql-binlog-connector-java" % "0.25.4",
