@@ -1,5 +1,5 @@
 addSbtPlugin("io.github.davidgregory084" %% "sbt-tpolecat"     % "0.1.20")
 addSbtPlugin("org.scalameta"             %% "sbt-scalafmt"     % "2.4.4")
-addSbtPlugin("ch.epfl.scala"             %% "sbt-scalafix"     % "0.9.32")
+addSbtPlugin("ch.epfl.scala"             %% "sbt-scalafix"     % "0.9.33")
 addSbtPlugin("org.scalameta"              % "sbt-native-image" % "0.3.2")
 addSbtPlugin("de.heikoseeberger"          % "sbt-header"       % "5.6.0")
