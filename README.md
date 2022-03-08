@@ -9,7 +9,7 @@ Filter, count and pretty print binlog files' events from the command line
 
 Build the application using `sbt nativeImage` and you will find the executable under `./target/native-image/blq`
 
-## Usage 
+## BLQ Usage
 
 ```
 Usage:
